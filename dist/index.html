@@ -12,6 +12,9 @@
 <script src="words.js" defer></script>
 <script src="exercises.js" defer></script>
 <script src="vocabulary.js" defer></script>
+<script src="pni-data.js" defer></script>
+<script src="pni-core.js" defer></script>
+<script src="pni.js" defer></script>
 <script src="app.js" defer></script>
 </head>
 <body>
@@ -22,6 +25,7 @@
     <a href="#planejador"><span class="nav-icon" aria-hidden="true">▦</span>Semana</a>
     <a href="#vocabulario"><span class="nav-icon" aria-hidden="true">Aa</span>Vocabulário</a>
     <a href="#exercicios"><span class="nav-icon" aria-hidden="true">✓</span>Exercícios</a>
+    <a href="#gramatica"><span class="nav-icon" aria-hidden="true">Ab</span>Gramática</a>
     <a href="#caderno"><span class="nav-icon" aria-hidden="true">▤</span>Caderno</a>
   </nav>
   <span class="level">NÍVEL A1</span>
@@ -46,6 +50,7 @@
   <nav class="study-links" aria-label="Começar uma prática">
     <a href="#vocabulario"><span class="study-icon" aria-hidden="true">Aa</span><span><strong>Flashcards</strong><small>Palavras do dia e revisão</small></span><b aria-hidden="true">›</b></a>
     <a href="#exercicios"><span class="study-icon" aria-hidden="true">✓</span><span><strong>Treino rápido</strong><small>6 perguntas · até 60 pontos</small></span><b aria-hidden="true">›</b></a>
+    <a href="#gramatica"><span class="study-icon" aria-hidden="true">Ab</span><span><strong>Gramática</strong><small>Com revisão no dia certo</small></span><b aria-hidden="true">›</b></a>
     <a href="#caderno"><span class="study-icon" aria-hidden="true">▤</span><span><strong>Meu caderno</strong><small>Palavras e frases que anotei</small></span><b aria-hidden="true">›</b></a>
   </nav>
   <section class="section" id="planejador" aria-labelledby="week-title">
@@ -193,6 +198,38 @@
       <p>Faça 30 pontos no Treino rápido para abrir a primeira missão. Depois, faça pelo menos 20 pontos por missão para liberar a seguinte.</p>
       <div class="mission-grid" id="exercise-mission-list"></div>
     </div>
+  </section>
+  <section class="section" id="gramatica" aria-labelledby="pni-title">
+    <div class="section-head vocab-head">
+      <div><p class="kicker">COM A EMMA E A SOPHIA</p><h2 id="pni-title">Gramática</h2></div>
+    </div>
+    <article class="card exercise-card pni-card">
+      <div id="pni-start">
+        <p>A Emma traz um exercício por vez e explica cada resposta. A Sophia guarda o que você errou e traz de volta no dia certo: errou, volta em 10 minutos; acertou, volta em 1, 3, 7, 14 e depois 30 dias.</p>
+        <p class="pni-status" id="pni-status" role="status"></p>
+        <button type="button" id="pni-begin">Praticar gramática</button>
+        <p class="pni-note" id="pni-note" tabindex="-1"></p>
+      </div>
+      <div id="pni-round" hidden>
+        <p class="kicker" id="pni-kind"></p>
+        <h3 id="pni-prompt" lang="en" tabindex="-1"></h3>
+        <p id="pni-hint"></p>
+        <form id="pni-form">
+          <div id="pni-choices" class="exercise-choices" role="group" aria-label="Opções de resposta"></div>
+          <div id="pni-fill" hidden>
+            <label for="pni-input">Sua resposta em inglês</label>
+            <input id="pni-input" type="text" lang="en" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="80">
+          </div>
+          <button type="submit" id="pni-check" hidden>Conferir resposta</button>
+        </form>
+        <p id="pni-feedback" role="status"></p>
+        <p id="pni-explanation"></p>
+        <div class="pni-actions">
+          <button type="button" id="pni-next" hidden>Próximo</button>
+          <button type="button" id="pni-stop">Parar por hoje</button>
+        </div>
+      </div>
+    </article>
   </section>
   <section class="section notebook" id="caderno" aria-labelledby="notebook-title">
     <div class="section-head">
