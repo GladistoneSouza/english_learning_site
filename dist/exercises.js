@@ -64,18 +64,36 @@ const pronunciationTips = new Map([
   const storageKey = "ingles-em-10:exercise-best:v1";
   const points = 10;
   const grammar = [
-    ["She ___ at a daycare.", "Ela trabalha em uma creche.", ["works"], "Com she, work vira works nesta frase."],
-    ["They ___ the bus every morning.", "Eles pegam o ônibus todas as manhãs.", ["take"], "Com they, usamos take na forma básica."],
+    ["She ___ at a daycare.", "Ela trabalha em uma creche. (work)", ["works"], "Com she, work vira works nesta frase."],
+    ["They ___ the bus every morning.", "Eles pegam o ônibus todas as manhãs. (take)", ["take"], "Com they, usamos take na forma básica."],
     ["___ you live near here?", "Você mora perto daqui?", ["do"], "Use Do para começar uma pergunta de rotina com you."],
     ["___ she work on Mondays?", "Ela trabalha às segundas?", ["does"], "Use Does para começar uma pergunta de rotina com she."],
     ["I ___ ready to go.", "Estou pronta para ir.", ["am"], "Com I, a forma de to be no presente é am."],
     ["The keys ___ on the table.", "As chaves estão na mesa.", ["are"], "Keys está no plural, então usamos are."],
     ["My bag ___ under the chair.", "Minha bolsa está embaixo da cadeira.", ["is"], "My bag está no singular, então usamos is."],
-    ["I ___ my keys yesterday.", "Eu esqueci minhas chaves ontem.", ["forgot"], "Forgot é o passado de forget."],
-    ["Can you ___ that, please?", "Você pode repetir isso, por favor?", ["repeat"], "Depois de can, repeat fica na forma básica."],
+    ["I ___ my keys yesterday.", "Eu esqueci minhas chaves ontem. (forget)", ["forgot"], "Forgot é o passado de forget."],
+    ["Can you ___ that, please?", "Você pode repetir isso, por favor? (repeat)", ["repeat"], "Depois de can, repeat fica na forma básica."],
     ["___ is my coat?", "Onde está meu casaco?", ["where"], "Use where para perguntar onde algo está."],
     ["I have ___ appointment at nine.", "Tenho uma consulta às nove.", ["an"], "Appointment começa com som de vogal, então usamos an."],
-    ["We ___ busy yesterday.", "Estávamos ocupados ontem.", ["were"], "Com we, a forma de to be no passado é were."]
+    ["We ___ busy yesterday.", "Estávamos ocupados ontem.", ["were"], "Com we, a forma de to be no passado é were."],
+    ["He ___ the bus at six.", "Ele pega o ônibus às seis. (take)", ["takes"], "Com he, acrescentamos -s a take."],
+    ["She ___ like tea.", "Ela não gosta de chá. (do not)", ["does not", "doesn't"], "Use does not ou doesn't com she. Like fica na forma básica."],
+    ["They ___ work on Sundays.", "Eles não trabalham aos domingos. (do not)", ["do not", "don't"], "Use do not ou don't com they."],
+    ["___ do you get off the bus?", "Em que lugar você desce do ônibus?", ["where"], "Where pergunta pelo lugar."],
+    ["___ time does the store open?", "A que horas a loja abre?", ["what"], "Use What time para perguntar a hora."],
+    ["There ___ a book on the shelf.", "Há um livro na prateleira.", ["is"], "Use there is quando há uma coisa no singular."],
+    ["There ___ two cups on the tray.", "Há dois copos na bandeja.", ["are"], "Use there are antes de um substantivo no plural."],
+    ["My appointment is ___ Monday.", "Minha consulta é na segunda-feira.", ["on"], "Use on com dias da semana."],
+    ["The class starts ___ nine.", "A aula começa às nove.", ["at"], "Use at para indicar um horário."],
+    ["The kids are ___ outside.", "As crianças estão brincando lá fora. (play)", ["playing"], "Use are + verbo com -ing para uma ação que está acontecendo."],
+    ["Please ___ your hands.", "Por favor, lave as mãos. (wash)", ["wash"], "Em um pedido direto, use a forma básica do verbo."],
+    ["Could I ___ a medium coffee, please?", "Eu gostaria de um café médio, por favor. (have / get)", ["have", "get"], "Could I have ou Could I get são formas educadas de pedir."],
+    ["We ___ to the park yesterday.", "Fomos ao parque ontem. (go)", ["went"], "Went é o passado de go."],
+    ["I ___ at home yesterday.", "Eu estava em casa ontem. (to be)", ["was"], "No passado, use I was."],
+    ["This is ___ coat.", "Este é o meu casaco.", ["my"], "Use my antes da coisa que pertence a você quando fala de si mesma."],
+    ["___ are my keys here in my hand.", "Estas são as minhas chaves, aqui na minha mão. (this / these)", ["these"], "Use these para coisas no plural que estão perto."],
+    ["My bag is ___ the chair.", "Minha bolsa está embaixo da cadeira.", ["under"], "Under indica que algo está embaixo."],
+    ["I need ___ buy milk.", "Eu preciso comprar leite.", ["to"], "Use need to seguido do verbo na forma básica."]
   ];
   let day = "";
   let dailyEntries = [];
@@ -125,6 +143,8 @@ const pronunciationTips = new Map([
     englishSpeech.stop();
     const question = questions[position];
     graded = false;
+    get("progress-bar").max = questions.length;
+    get("progress-bar").value = position;
     get("progress").textContent = "Pergunta " + (position + 1) + " de " + questions.length + " · " + score + " pontos";
     get("prompt").textContent = question.listening ? "O que significa a palavra que você ouviu?"
       : question.choices ? "O que esta palavra significa?" : "Complete a frase em inglês.";
@@ -177,6 +197,7 @@ const pronunciationTips = new Map([
     const correct = question.answers.some((answer) => normalize(answer) === normalize(response));
     graded = true;
     if (correct) score += points;
+    get("progress-bar").value = position + 1;
     get("input").disabled = true;
     get("check").hidden = true;
     for (const button of get("choices").children) {
