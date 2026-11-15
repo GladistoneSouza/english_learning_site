@@ -63,16 +63,52 @@ const pronunciationTips = new Map([
   const get = (id) => document.getElementById("exercise-" + id);
   const storageKey = "ingles-em-10:exercise-best:v1";
   const points = 10;
+  const missionKey = "ingles-em-10:missions:v1";
+  const missions = [
+    {
+      id: "coffee", title: "Pedir um café",
+      questions: [
+        {word: "That's all, thanks.", choices: ["É para viagem.", "É só isso, obrigada.", "Quero pagar em dinheiro."],
+          answers: ["É só isso, obrigada."], explanation: "Use That's all, thanks para encerrar o pedido."},
+        {phrase: "Could I ___ a medium coffee, please?", translation: "Eu gostaria de um café médio, por favor. (have / get)",
+          answers: ["have", "get"], explanation: "Could I have…? e Could I get…? são formas educadas de pedir."},
+        {word: "Would you like a receipt?", listening: true, choices: ["Você quer mais café?", "Você quer pagar com cartão?", "Você quer o recibo?"],
+          answers: ["Você quer o recibo?"], explanation: "Receipt significa recibo. O p é mudo."}
+      ]
+    },
+    {
+      id: "bus", title: "Pegar o ônibus",
+      questions: [
+        {word: "Get off the bus.", choices: ["Descer do ônibus.", "Pegar o ônibus.", "Esperar o ônibus."],
+          answers: ["Descer do ônibus."], explanation: "Get off é descer. Get on é embarcar."},
+        {phrase: "___ this bus go downtown?", translation: "Este ônibus vai até o centro? (do / does)",
+          answers: ["does"], explanation: "Use Does para começar essa pergunta com this bus."},
+        {word: "The next stop is Main Street.", listening: true, choices: ["O ônibus está atrasado.", "A próxima parada é Main Street.", "A última parada foi Main Street."],
+          answers: ["A próxima parada é Main Street."], explanation: "Next stop significa próxima parada."}
+      ]
+    },
+    {
+      id: "daycare", title: "Conversar na creche",
+      questions: [
+        {word: "Let's take turns.", choices: ["Vamos lavar as mãos.", "Vamos guardar os brinquedos.", "Vamos nos revezar."],
+          answers: ["Vamos nos revezar."], explanation: "Use take turns para combinar a vez de cada criança."},
+        {phrase: "Please ___ your hands.", translation: "Por favor, lave as mãos. (wash)",
+          answers: ["wash"], explanation: "Please wash your hands é um pedido direto e gentil."},
+        {word: "It's time to clean up.", listening: true, choices: ["É hora de arrumar tudo.", "É hora de comer.", "É hora de brincar lá fora."],
+          answers: ["É hora de arrumar tudo."], explanation: "Clean up aqui é guardar os materiais e arrumar o espaço."}
+      ]
+    }
+  ];
   const grammar = [
-    ["She ___ at a daycare.", "Ela trabalha em uma creche.", ["works"], "Com she, work vira works nesta frase."],
-    ["They ___ the bus every morning.", "Eles pegam o ônibus todas as manhãs.", ["take"], "Com they, usamos take na forma básica."],
+    ["She ___ at a daycare.", "Ela trabalha em uma creche. (work)", ["works"], "Com she, work vira works nesta frase."],
+    ["They ___ the bus every morning.", "Eles pegam o ônibus todas as manhãs. (take)", ["take"], "Com they, usamos take na forma básica."],
     ["___ you live near here?", "Você mora perto daqui?", ["do"], "Use Do para começar uma pergunta de rotina com you."],
     ["___ she work on Mondays?", "Ela trabalha às segundas?", ["does"], "Use Does para começar uma pergunta de rotina com she."],
     ["I ___ ready to go.", "Estou pronta para ir.", ["am"], "Com I, a forma de to be no presente é am."],
     ["The keys ___ on the table.", "As chaves estão na mesa.", ["are"], "Keys está no plural, então usamos are."],
     ["My bag ___ under the chair.", "Minha bolsa está embaixo da cadeira.", ["is"], "My bag está no singular, então usamos is."],
-    ["I ___ my keys yesterday.", "Eu esqueci minhas chaves ontem.", ["forgot"], "Forgot é o passado de forget."],
-    ["Can you ___ that, please?", "Você pode repetir isso, por favor?", ["repeat"], "Depois de can, repeat fica na forma básica."],
+    ["I ___ my keys yesterday.", "Eu esqueci minhas chaves ontem. (forget)", ["forgot"], "Forgot é o passado de forget."],
+    ["Can you ___ that, please?", "Você pode repetir isso, por favor? (repeat)", ["repeat"], "Depois de can, repeat fica na forma básica."],
     ["___ is my coat?", "Onde está meu casaco?", ["where"], "Use where para perguntar onde algo está."],
     ["I have ___ appointment at nine.", "Tenho uma consulta às nove.", ["an"], "Appointment começa com som de vogal, então usamos an."],
     ["We ___ busy yesterday.", "Estávamos ocupados ontem.", ["were"], "Com we, a forma de to be no passado é were."]
@@ -84,10 +120,13 @@ const pronunciationTips = new Map([
   let score = 0;
   let graded = false;
   let bestScores = {};
+  let missionScores = {};
+  let activeMission = null;
 
   function loadScores() {
     try {
-      bestScores = JSON.parse(localStorage.getItem(storageKey)) ?? {};
+      bestScores = JSON.parse(localStorage.getItem(storageKey)) ?? bestScores;
+      missionScores = JSON.parse(localStorage.getItem(missionKey)) ?? missionScores;
     } catch {
       // Keep scores available for this visit if browser storage is unavailable.
     }
@@ -99,14 +138,53 @@ const pronunciationTips = new Map([
 
   function storeBest() {
     loadScores();
-    bestScores[day] = Math.max(score, bestScores[day] || 0);
+    const scores = activeMission ? missionScores : bestScores;
+    const key = activeMission ? activeMission.id : day;
+    scores[key] = Math.max(score, scores[key] || 0);
     updateBest();
     try {
-      localStorage.setItem(storageKey, JSON.stringify(bestScores));
+      localStorage.setItem(activeMission ? missionKey : storageKey, JSON.stringify(scores));
       return true;
     } catch {
       return false;
     }
+  }
+
+  function missionUnlocked(index) {
+    if (index === 0) return Object.values(bestScores).some((value) => value >= 30);
+    return (missionScores[missions[index - 1].id] || 0) >= 20;
+  }
+
+  function renderMissions() {
+    const buttons = missions.map((mission, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "mission-card";
+      button.textContent = mission.title;
+      const status = document.createElement("small");
+      button.disabled = !missionUnlocked(index);
+      const best = missionScores[mission.id] || 0;
+      status.textContent = button.disabled ? "Bloqueada" : best >= 20
+        ? "Concluída · " + best + "/30 pontos" : "Disponível · " + best + "/30 pontos";
+      button.append(status);
+      button.addEventListener("click", () => {
+        if (!missionUnlocked(index)) return;
+        activeMission = mission;
+        start();
+      });
+      return button;
+    });
+    get("mission-list").replaceChildren(...buttons);
+  }
+
+  function goHome() {
+    englishSpeech.stop();
+    activeMission = null;
+    get("start").hidden = false;
+    get("round").hidden = true;
+    get("finish").hidden = true;
+    get("missions").hidden = false;
+    renderMissions();
   }
 
   function choiceQuestion(entry, position, listening = false) {
@@ -125,9 +203,9 @@ const pronunciationTips = new Map([
     englishSpeech.stop();
     const question = questions[position];
     graded = false;
-    get("progress").textContent = "Pergunta " + (position + 1) + " de " + questions.length + " · " + score + " pontos";
-    get("prompt").textContent = question.listening ? "O que significa a palavra que você ouviu?"
-      : question.choices ? "O que esta palavra significa?" : "Complete a frase em inglês.";
+    get("progress").textContent = (activeMission ? activeMission.title + " · " : "") + "Pergunta " + (position + 1) + " de " + questions.length + " · " + score + " pontos";
+    get("prompt").textContent = question.listening ? "O que você ouviu em inglês?"
+      : question.choices ? "O que isso significa?" : "Complete a frase em inglês.";
     get("phrase").textContent = question.phrase || (question.listening ? "" : question.word);
     get("choices").hidden = !question.choices;
     get("listening").hidden = !question.listening;
@@ -154,19 +232,20 @@ const pronunciationTips = new Map([
     if (!dailyEntries.length) return;
     const dayIndex = Math.floor(Date.parse(day + "T00:00:00Z") / 86400000);
     const grammarIndex = ((dayIndex * 2) % grammar.length + grammar.length) % grammar.length;
-    questions = [
-      choiceQuestion(dailyEntries[0], dayIndex % 4),
+    questions = activeMission ? activeMission.questions : [
+      choiceQuestion(dailyEntries[0], (dayIndex * 3 + 1) % 4),
       grammarQuestion(grammar[grammarIndex]),
-      choiceQuestion(dailyEntries[1], (dayIndex + 1) % 4),
-      choiceQuestion(dailyEntries[2], (dayIndex + 2) % 4, true),
+      choiceQuestion(dailyEntries[1], (dayIndex * 7 + 3) % 4),
+      choiceQuestion(dailyEntries[2], (dayIndex * 19 + 1) % 4, true),
       grammarQuestion(grammar[(grammarIndex + 1) % grammar.length]),
-      choiceQuestion(dailyEntries[3], (dayIndex + 3) % 4)
+      choiceQuestion(dailyEntries[3], (Math.floor(dayIndex / 2) + 2) % 4)
     ];
     position = 0;
     score = 0;
     get("start").hidden = true;
     get("finish").hidden = true;
     get("round").hidden = false;
+    get("missions").hidden = true;
     showQuestion();
   }
 
@@ -185,7 +264,7 @@ const pronunciationTips = new Map([
     }
     if (!correct) selectedButton?.classList.add("incorrect");
     get("feedback").textContent = (correct ? "Acertou! +10 pontos." : "Resposta: " + question.answers[0] + ".")
-      + (question.listening ? " Você ouviu “" + question.word + "”." : "") + "\n" + question.explanation;
+      + (question.listening ? " Em inglês: “" + question.word + "”." : "") + "\n" + question.explanation;
     get("play").disabled = true;
     get("text").hidden = true;
     get("next").textContent = position === questions.length - 1 ? "Ver resultado" : "Próxima pergunta";
@@ -195,6 +274,10 @@ const pronunciationTips = new Map([
 
   get("begin").addEventListener("click", start);
   get("replay").addEventListener("click", start);
+  get("home").addEventListener("click", () => {
+    goHome();
+    get("begin").focus();
+  });
   get("form").addEventListener("submit", (event) => {
     event.preventDefault();
     if (!get("input").value.trim()) {
@@ -221,10 +304,19 @@ const pronunciationTips = new Map([
     englishSpeech.stop();
     get("round").hidden = true;
     get("finish").hidden = false;
-    get("result").textContent = score + "/60 pontos";
-    get("result-note").textContent = storeBest()
-      ? "Seu melhor resultado do dia escolhido foi guardado neste navegador."
-      : "O navegador bloqueou o salvamento da pontuação.";
+    get("result").textContent = score + "/" + (questions.length * points) + " pontos";
+    const availableBefore = missions.filter((_, index) => missionUnlocked(index)).length;
+    const saved = storeBest();
+    const availableAfter = missions.filter((_, index) => missionUnlocked(index)).length;
+    if (!saved) {
+      get("result-note").textContent = "A pontuação e os desbloqueios desta visita não puderam ser salvos.";
+    } else if (availableAfter > availableBefore) {
+      get("result-note").textContent = "Você desbloqueou: " + missions[availableBefore].title + ".";
+    } else {
+      get("result-note").textContent = "Seu melhor resultado foi guardado neste navegador.";
+    }
+    get("missions").hidden = false;
+    renderMissions();
     get("result").focus();
   });
 
@@ -233,8 +325,6 @@ const pronunciationTips = new Map([
     dailyEntries = detail.entries;
     loadScores();
     updateBest();
-    get("start").hidden = false;
-    get("round").hidden = true;
-    get("finish").hidden = true;
+    goHome();
   });
 })();
