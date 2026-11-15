@@ -12,7 +12,8 @@ const appFiles = [
 const appFileUrls = new Set(appFiles);
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(appFiles)));
+  // Ativa logo a versão nova para os arquivos novos entrarem no cache offline.
+  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(appFiles)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {

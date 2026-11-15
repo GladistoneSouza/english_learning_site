@@ -14,28 +14,63 @@
   let graded = false;
   let answered = 0;
   let hits = 0;
-  let canSave = true;
+  let locked = false; // progresso de outra versão do site: não sobrescrever
 
-  function load() {
+  function backup(raw) {
     try {
-      const saved = JSON.parse(localStorage.getItem(storageKey));
-      if (saved?.schema === 1 && saved.items && typeof saved.items === "object") {
-        core.states(saved, catalog); // recusa progresso corrompido
-        progress = saved;
-      }
+      localStorage.setItem(storageKey + ":copia:" + new Date().toISOString(), raw);
     } catch {
-      progress = core.emptyProgress();
-      try {
-        // guarda uma cópia do que estava salvo antes de recomeçar
-        localStorage.setItem(storageKey + ":corrompido", localStorage.getItem(storageKey) ?? "");
-      } catch {
-        // sem espaço ou sem acesso: segue sem a cópia
-      }
-      get("note").textContent = "Não deu para ler o progresso salvo. Começando do zero neste navegador.";
+      // sem espaço ou sem acesso: segue sem a cópia
     }
   }
 
+  // Lê o progresso salvo. Itens com problema são separados (com cópia) sem perder os outros.
+  function load() {
+    let raw = null;
+    try {
+      raw = localStorage.getItem(storageKey);
+    } catch {
+      return "Este navegador não deixa salvar o progresso.";
+    }
+    if (raw === null) {
+      progress = core.emptyProgress();
+      return "";
+    }
+    let saved;
+    try {
+      saved = JSON.parse(raw);
+    } catch {
+      saved = null;
+    }
+    if (saved && typeof saved.schema === "number" && saved.schema > 1) {
+      locked = true;
+      progress = core.emptyProgress();
+      return "Seu progresso foi salvo por uma versão mais nova do site. Recarregue a página.";
+    }
+    if (saved?.schema !== 1 || !saved.items || typeof saved.items !== "object" || Array.isArray(saved.items)) {
+      backup(raw);
+      progress = core.emptyProgress();
+      return "Não deu para ler o progresso salvo. Guardamos uma cópia e começamos do zero.";
+    }
+    const items = {};
+    let dropped = 0;
+    for (const [id, entry] of Object.entries(saved.items)) {
+      try {
+        core.states({schema: 1, items: {[id]: entry}}, catalog);
+        items[id] = entry;
+      } catch {
+        dropped++;
+      }
+    }
+    progress = {...saved, items};
+    if (!dropped) return "";
+    backup(raw);
+    return dropped === 1 ? "Um registro estava com problema e foi separado. O resto do progresso continua."
+      : dropped + " registros estavam com problema e foram separados. O resto do progresso continua.";
+  }
+
   function save() {
+    if (locked) return false;
     try {
       localStorage.setItem(storageKey, JSON.stringify(progress));
       return true;
@@ -60,7 +95,7 @@
     if (fresh) parts.push(fresh === 1 ? "1 exercício novo" : fresh + " exercícios novos");
     if (!parts.length) parts.push(nextReviewAt ? "Tudo em dia · próxima revisão " + whenLabel(nextReviewAt) : "Tudo em dia");
     get("status").textContent = parts.join(" · ");
-    get("begin").disabled = !due && !fresh;
+    get("begin").disabled = locked || (!due && !fresh);
   }
 
   function showHome() {
@@ -112,15 +147,18 @@
   function grade(answer, selectedButton) {
     if (graded || !item || !answer.trim()) return;
     const correct = core.isCorrect(answer, item.accepted);
+    load(); // outra aba pode ter salvo algo desde a última leitura
     let state;
     try {
       ({progress, state} = core.recordAttempt(progress, item.id, correct, Date.now()));
-    } catch {
-      get("feedback").textContent = "O relógio do aparelho parece errado. Confira a data e a hora.";
+    } catch (error) {
+      get("feedback").textContent = error instanceof RangeError
+        ? "O relógio do aparelho parece errado. Confira a data e a hora."
+        : "Algo deu errado ao registrar a resposta. Recarregue a página.";
       return;
     }
     graded = true;
-    canSave = save() && canSave;
+    const saved = save();
     answered++;
     if (correct) hits++;
     get("input").disabled = true;
@@ -132,7 +170,7 @@
     if (!correct) selectedButton?.classList.add("incorrect");
     get("feedback").textContent = (correct ? "Acertou!" : "Resposta: " + item.accepted[0] + ".")
       + " Volta para revisão " + whenLabel(state.nextReviewAt) + "."
-      + (canSave ? "" : " (Não deu para salvar neste navegador.)");
+      + (saved ? "" : " (Não deu para salvar neste navegador.)");
     get("explanation").textContent = explanations[item.explanation_key] ?? "";
     get("next").hidden = false;
     get("next").focus();
@@ -156,11 +194,18 @@
   });
   get("next").addEventListener("click", showItem);
   get("stop").addEventListener("click", () => finish(answered
-    ? "Você respondeu " + answered + " e acertou " + hits + ". Até a próxima!" : ""));
-  document.addEventListener("visibilitychange", () => {
+    ? "Você respondeu " + answered + " e acertou " + hits + ". Até a próxima!" : "Tudo bem. Até a próxima!"));
+  const refreshHome = () => {
     if (!document.hidden && !get("start").hidden) renderStatus();
+  };
+  document.addEventListener("visibilitychange", refreshHome);
+  setInterval(refreshHome, 30 * 1000); // "volta em 10 min" aparece sem recarregar
+  window.addEventListener("storage", (event) => {
+    if (event.key !== storageKey) return;
+    load();
+    refreshHome();
   });
 
-  load();
+  get("note").textContent = load();
   showHome();
 })();
