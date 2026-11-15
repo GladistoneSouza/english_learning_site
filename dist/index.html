@@ -2,55 +2,90 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f4f7f8">
-<meta name="description" content="Planeje sua semana de inglês A1, pratique listening e shadowing e registre seu progresso.">
-<title>Inglês em 10 · Planejador A1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1d2b6f">
+<title>Inglês em 10 — treino de inglês básico (A1) em 10 minutos por dia</title>
+<meta name="description" content="Treino gratuito de inglês para iniciantes: 10 minutos por dia de listening, shadowing, flashcards com revisão espaçada e exercícios curtos. Funciona no celular, sem cadastro.">
+<link rel="canonical" href="https://leandraalveslab.github.io/english_learning_site/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Inglês em 10">
+<meta property="og:title" content="Inglês em 10 — 10 minutos de inglês por dia">
+<meta property="og:description" content="Listening, flashcards e exercícios curtos para quem está começando no inglês. Grátis e sem cadastro.">
+<meta property="og:url" content="https://leandraalveslab.github.io/english_learning_site/">
+<meta property="og:image" content="https://leandraalveslab.github.io/english_learning_site/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap">
 <link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","name":"Inglês em 10","url":"https://leandraalveslab.github.io/english_learning_site/","applicationCategory":"EducationalApplication","operatingSystem":"Web, Android, iOS","inLanguage":"pt-BR","description":"Treino diário de inglês nível A1 em 10 minutos: listening em três etapas, shadowing, flashcards com revisão espaçada e exercícios curtos.","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"educationalLevel":"A1","teaches":"Inglês básico"},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Dá para aprender inglês com 10 minutos por dia?","acceptedAnswer":{"@type":"Answer","text":"Dez minutos diários criam o hábito e mantêm o ouvido em contato com o idioma. O Inglês em 10 organiza esse tempo em escuta, repetição em voz alta e revisão de vocabulário, que são as práticas que mais rendem no começo."}},
+{"@type":"Question","name":"Preciso criar conta?","acceptedAnswer":{"@type":"Answer","text":"Não. Seu plano, suas palavras e suas anotações ficam salvos no próprio navegador do celular ou do computador."}},
+{"@type":"Question","name":"O que é shadowing?","acceptedAnswer":{"@type":"Answer","text":"É ouvir uma frase curta em inglês e repetir logo em seguida, imitando o ritmo e a entonação. Ajuda na pronúncia e na compreensão oral."}},
+{"@type":"Question","name":"Para qual nível é o Inglês em 10?","acceptedAnswer":{"@type":"Answer","text":"Para iniciantes, no nível A1 do Quadro Europeu Comum de Referência: quem está aprendendo as primeiras palavras e frases do dia a dia."}}
+]}]}
+</script>
 <script src="words.js" defer></script>
 <script src="exercises.js" defer></script>
 <script src="vocabulary.js" defer></script>
 <script src="app.js" defer></script>
+<script src="today.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#planejador">Ir ao planejador</a>
 <header class="top"><div class="shell top-inner">
-  <a class="brand" href="#inicio"><span class="brand-icon" aria-hidden="true">▤</span> Inglês em 10</a>
+  <a class="brand" href="#inicio"><span class="brand-icon" aria-hidden="true">10</span> Inglês em 10</a>
   <nav class="app-nav" aria-label="Seções">
     <a href="#planejador"><span class="nav-icon" aria-hidden="true">▦</span>Semana</a>
     <a href="#vocabulario"><span class="nav-icon" aria-hidden="true">Aa</span>Vocabulário</a>
     <a href="#exercicios"><span class="nav-icon" aria-hidden="true">✓</span>Exercícios</a>
     <a href="#caderno"><span class="nav-icon" aria-hidden="true">▤</span>Caderno</a>
   </nav>
-  <span class="level">NÍVEL A1</span>
+  <span class="level">Nível A1</span>
 </div></header>
 <main class="shell" id="inicio">
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <h1 id="hero-title">Seu treino<br><em>de inglês.</em></h1>
-      <p class="intro">Comece com 10 minutos de escuta ou escolha uma prática abaixo.</p>
-      <a class="button dark" id="go-today" href="#treino">Treinar hoje</a>
+      <h1 id="hero-title">Dez minutos de inglês, todo dia.</h1>
+      <p class="intro">Ouça um trecho curto, repita em voz alta e revise cinco palavras. Seu progresso fica salvo neste aparelho.</p>
+      <a class="button primary" id="go-today" href="#treino">Treinar hoje</a>
+    </div>
+    <div class="dial" role="img" id="today-dial" aria-label="Listening de hoje: 0 de 10 minutos">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="dial-track" cx="60" cy="60" r="52"/>
+        <circle class="dial-fill" id="dial-fill" cx="60" cy="60" r="52" pathLength="100" stroke-dasharray="0 100"/>
+      </svg>
+      <div class="dial-center" aria-hidden="true"><strong id="dial-minutes">0</strong><span>de 10 min</span></div>
+      <p class="streak" id="today-streak"></p>
     </div>
     <aside class="feature" aria-label="Série sugerida para listening">
-      <div class="feature-top"><span class="feature-icon" aria-hidden="true">▷</span><span> SÉRIE EM DESTAQUE</span></div>
+      <p class="feature-top"><span class="feature-icon" aria-hidden="true">▷</span> Série sugerida para o listening</p>
       <h2 lang="en">Extra English</h2>
-      <p>Siga a história episódio a episódio. Escolha um trecho curto e retome de onde parou no próximo treino.</p>
+      <p>Uma história contada episódio a episódio, com inglês simples. Escolha um trecho curto e retome de onde parou no próximo treino.</p>
       <div class="feature-actions">
-        <a href="https://www.youtube.com/results?search_query=Extra+English+full+episodes+playlist" target="_blank" rel="noopener noreferrer">Buscar episódios</a>
+        <a href="https://www.youtube.com/results?search_query=Extra+English+full+episodes+playlist" target="_blank" rel="noopener noreferrer">Buscar episódios no YouTube</a>
         <button type="button" id="use-series">Usar no treino</button>
       </div>
     </aside>
   </section>
   <nav class="study-links" aria-label="Começar uma prática">
     <a href="#vocabulario"><span class="study-icon" aria-hidden="true">Aa</span><span><strong>Flashcards</strong><small>Palavras do dia e revisão</small></span><b aria-hidden="true">›</b></a>
-    <a href="#exercicios"><span class="study-icon" aria-hidden="true">✓</span><span><strong>Treino rápido</strong><small>6 perguntas · até 60 pontos</small></span><b aria-hidden="true">›</b></a>
+    <a href="#exercicios"><span class="study-icon" aria-hidden="true">✓</span><span><strong>Treino rápido</strong><small>6 perguntas, até 60 pontos</small></span><b aria-hidden="true">›</b></a>
     <a href="#caderno"><span class="study-icon" aria-hidden="true">▤</span><span><strong>Meu caderno</strong><small>Palavras e frases que anotei</small></span><b aria-hidden="true">›</b></a>
   </nav>
   <section class="section" id="planejador" aria-labelledby="week-title">
     <div class="section-head">
-      <div><p class="kicker">SEGUNDA A DOMINGO</p><h2 id="week-title">Minha semana</h2></div>
+      <div><p class="kicker">Segunda a domingo</p><h2 id="week-title">Minha semana</h2></div>
       <div class="week-nav"><button class="icon-btn" id="prev-week" aria-label="Semana anterior">‹</button><span id="week-range"></span><button class="icon-btn" id="next-week" aria-label="Próxima semana">›</button></div>
     </div>
     <div class="week-days" id="week-days" aria-label="Dias da semana"></div>
@@ -153,7 +188,7 @@
   </section>
   <section class="section" id="exercicios" aria-labelledby="exercise-title">
     <div class="section-head vocab-head">
-      <div><p class="kicker">INGLÊS A1</p><h2 id="exercise-title">Treino rápido</h2></div>
+      <div><p class="kicker">Vocabulário, gramática e escuta</p><h2 id="exercise-title">Treino rápido</h2></div>
       <strong class="exercise-best" id="exercise-best"></strong>
     </div>
     <article class="card exercise-card">
@@ -207,6 +242,22 @@
         <textarea id="phrases" placeholder="Ex.: I take the bus to work. — Eu vou de ônibus para o trabalho."></textarea>
       </label>
     </div>
+  </section>
+  <section class="section about" id="como-funciona" aria-labelledby="about-title">
+    <h2 id="about-title">Como funciona o treino</h2>
+    <ol class="method">
+      <li><h3>Escute o mesmo trecho três vezes</h3><p>Primeiro sem legenda, para pegar a ideia geral. Depois com a transcrição, para conferir. Por fim, sem legenda de novo, para notar o que ficou claro.</p></li>
+      <li><h3>Repita em voz alta</h3><p>No shadowing você ouve uma frase e repete em seguida, imitando o ritmo. É o jeito mais rápido de destravar a pronúncia.</p></li>
+      <li><h3>Revise cinco palavras</h3><p>Os flashcards voltam em intervalos maiores quando você já lembra, e no dia seguinte quando ainda não lembra.</p></li>
+      <li><h3>Anote o que travou</h3><p>Palavras e frases que você não entendeu vão para o caderno, para revisar na próxima aula.</p></li>
+    </ol>
+  </section>
+  <section class="section faq" id="duvidas" aria-labelledby="faq-title">
+    <h2 id="faq-title">Dúvidas frequentes</h2>
+    <details><summary>Dá para aprender inglês com 10 minutos por dia?</summary><p>Dez minutos diários criam o hábito e mantêm o ouvido em contato com o idioma. O Inglês em 10 organiza esse tempo em escuta, repetição em voz alta e revisão de vocabulário, que são as práticas que mais rendem no começo.</p></details>
+    <details><summary>Preciso criar conta?</summary><p>Não. Seu plano, suas palavras e suas anotações ficam salvos no próprio navegador do celular ou do computador.</p></details>
+    <details><summary>O que é shadowing?</summary><p>É ouvir uma frase curta em inglês e repetir logo em seguida, imitando o ritmo e a entonação. Ajuda na pronúncia e na compreensão oral.</p></details>
+    <details><summary>Para qual nível é o Inglês em 10?</summary><p>Para iniciantes, no nível A1 do Quadro Europeu Comum de Referência: quem está aprendendo as primeiras palavras e frases do dia a dia.</p></details>
   </section>
 </main>
 <footer class="shell footer"><span>Inglês em 10</span><span>Seu plano e suas anotações ficam neste navegador.</span></footer>

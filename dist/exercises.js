@@ -151,7 +151,7 @@ const pronunciationTips = new Map([
   }
 
   function updateBest() {
-    get("best").textContent = "Melhor do dia escolhido · " + (bestScores[day] || 0) + "/60 pontos";
+    get("best").textContent = "Melhor resultado do dia: " + (bestScores[day] || 0) + " de 60 pontos";
   }
 
   function storeBest() {
@@ -183,7 +183,8 @@ const pronunciationTips = new Map([
       button.disabled = !missionUnlocked(index);
       const best = missionScores[mission.id] || 0;
       status.textContent = button.disabled ? "Bloqueada" : best >= 20
-        ? "Concluída · " + best + "/30 pontos" : "Disponível · " + best + "/30 pontos";
+        ? "Concluída: " + best + " de 30 pontos" : "Disponível: " + best + " de 30 pontos";
+      button.dataset.state = button.disabled ? "locked" : best >= 20 ? "done" : "open";
       button.append(status);
       button.addEventListener("click", () => {
         if (!missionUnlocked(index)) return;
@@ -223,7 +224,7 @@ const pronunciationTips = new Map([
     graded = false;
     get("progress-bar").max = questions.length;
     get("progress-bar").value = position;
-    get("progress").textContent = (activeMission ? activeMission.title + " · " : "") + "Pergunta " + (position + 1) + " de " + questions.length + " · " + score + " pontos";
+    get("progress").textContent = (activeMission ? activeMission.title + ": " : "") + "Pergunta " + (position + 1) + " de " + questions.length + ", " + score + " pontos";
     get("prompt").textContent = question.listening ? "O que você ouviu em inglês?"
       : question.choices ? "O que isso significa?" : "Complete a frase em inglês.";
     get("phrase").textContent = question.phrase || (question.listening ? "" : question.word);

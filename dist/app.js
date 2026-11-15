@@ -178,7 +178,7 @@ function updateDay() {
   const inClass = classDays.has(selected.getDay());
   const minimum = day.mode === "minimum";
   $("day-title").textContent = description.charAt(0).toUpperCase() + description.slice(1);
-  $("day-type").textContent = (isToday ? "HOJE · " : "") + (inClass ? "DIA DE AULA" : "PRÁTICA EM CASA");
+  $("day-type").textContent = (isToday ? "Hoje, " : "") + (inClass ? "dia de aula" : "prática em casa");
   $("day-description").textContent = minimum
     ? "Reserve 5 minutos para as três etapas com um trecho bem curto. Shadowing e gramática ficam opcionais."
     : inClass
