@@ -39,6 +39,7 @@
 <script src="exercises.js" defer></script>
 <script src="vocabulary.js" defer></script>
 <script src="app.js" defer></script>
+<script src="listening.js" defer></script>
 <script src="today.js" defer></script>
 </head>
 <body>
@@ -105,6 +106,30 @@
       <article class="card listening">
         <div class="card-head"><div class="tile-icon" aria-hidden="true">♫</div><div><h3>Listening</h3><p>O mesmo trecho, em três etapas.</p></div></div>
         <div id="steps" class="steps"></div>
+        <section class="audio-lab" aria-labelledby="audio-title">
+          <div class="audio-head">
+            <h4 id="audio-title">Áudios para treinar</h4>
+            <div class="mode" role="group" aria-label="Nível do áudio">
+              <button type="button" id="audio-level-A1" aria-pressed="true">A1</button>
+              <button type="button" id="audio-level-A2" aria-pressed="false">A2</button>
+              <button type="button" id="audio-level-B1" aria-pressed="false">B1</button>
+            </div>
+          </div>
+          <label for="audio-pick">Escolha um áudio</label>
+          <select id="audio-pick"></select>
+          <p class="audio-question" id="audio-question"></p>
+          <div class="audio-controls">
+            <button type="button" class="start" id="audio-play" aria-pressed="false">▶ Ouvir</button>
+            <button type="button" id="audio-restart">Do começo</button>
+            <label><input type="checkbox" id="audio-slow"> Mais devagar</label>
+          </div>
+          <progress id="audio-progress" max="1" value="0" aria-label="Progresso do áudio"></progress>
+          <p class="audio-status" id="audio-status" role="status"></p>
+          <div class="audio-choices" id="audio-choices"></div>
+          <p class="audio-status" id="audio-feedback" role="status"></p>
+          <button type="button" class="audio-reveal" id="audio-reveal" aria-controls="audio-transcript" aria-expanded="false">Mostrar transcrição</button>
+          <div class="audio-transcript" id="audio-transcript" lang="en" hidden></div>
+        </section>
         <div class="media-fields">
           <label for="media">Episódio ou áudio</label>
           <input id="media" maxlength="250" placeholder="Ex.: Extra English · episódio 1, 00:30–01:30">
