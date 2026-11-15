@@ -2,7 +2,7 @@
 
 const scope = self.registration.scope;
 const cachePrefix = "ingles-em-10:" + scope;
-const cacheName = cachePrefix + "v3";
+const cacheName = cachePrefix + "v4";
 const appHome = new URL("./", scope).href;
 const appIndex = new URL("index.html", scope).href;
 const appFiles = [

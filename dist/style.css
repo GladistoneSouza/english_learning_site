@@ -118,3 +118,12 @@ html{scroll-padding-top:91px}
 #exercise-input{border:1px solid #b7c7b7;border-radius:9px;background:#fcfbf6;padding:8px 10px;width:min(100%,340px);margin-top:5px}
 #exercise-feedback{margin-top:8px;white-space:pre-line}
 @media(max-width:460px){.exercise-choices{grid-template-columns:1fr}}
+.vocab-reference .audio-note{font-size:12px}
+.mission-section{margin-top:19px}
+.mission-section>p{font-size:14px;color:var(--muted);margin:5px 0 10px}
+.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mission-card{background:#fffefa;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;color:var(--ink);font-weight:800}
+.mission-card small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+.mission-card:enabled:hover{border-color:var(--green)}
+.mission-card:disabled{background:#f2f2e9;color:var(--muted);cursor:default}
+@media(max-width:560px){.mission-grid{grid-template-columns:1fr}}
