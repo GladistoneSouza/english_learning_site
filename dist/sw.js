@@ -2,17 +2,18 @@
 
 const scope = self.registration.scope;
 const cachePrefix = "ingles-em-10:" + scope;
-const cacheName = cachePrefix + "v4";
+const cacheName = cachePrefix + "v5";
 const appHome = new URL("./", scope).href;
 const appIndex = new URL("index.html", scope).href;
 const appFiles = [
-  "./", "index.html", "style.css", "app.js", "words.js", "vocabulary.js", "exercises.js", "manifest.webmanifest",
+  "./", "index.html", "style.css", "app.js", "words.js", "vocabulary.js", "exercises.js", "pni-data.js", "pni-core.js", "pni.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png"
 ].map((path) => new URL(path, scope).href);
 const appFileUrls = new Set(appFiles);
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(appFiles)));
+  // Ativa logo a versão nova para os arquivos novos entrarem no cache offline.
+  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(appFiles)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {
