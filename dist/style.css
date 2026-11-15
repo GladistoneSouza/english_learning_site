@@ -41,3 +41,30 @@
   .top-inner{height:auto;min-height:60px;flex-wrap:wrap;gap:7px;padding-block:9px}
   .top nav{width:100%;justify-content:space-between}
 }
+
+.vocab-jump{font-size:14px;font-weight:800;margin-bottom:10px;color:var(--green)}
+.vocab-audio{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:8px 0 12px}
+.vocab-audio[hidden],.exercise-choices[hidden]{display:none}
+.vocab-audio label{font-size:13px;color:var(--muted)}
+.vocab-audio input{accent-color:var(--green)}
+.vocab-audio button,#vocab-hear-example,.exercise-card button{border:1px solid #b7c7b7;border-radius:9px;padding:8px 12px;min-height:42px;background:#fffefa;font-weight:800;font-size:14px}
+#vocab-hear-example{margin-top:5px}
+.pronunciation{margin-top:10px;font-size:14px}
+.pronunciation summary{cursor:pointer;font-weight:800}
+.pronunciation a{display:inline-block;margin-top:5px;color:var(--green)}
+.exercise-best{background:#e8efe3;color:var(--green);padding:6px 11px;border-radius:9px;font-size:13px}
+.exercise-card{max-width:690px}
+.exercise-card h3{margin:7px 0}
+.exercise-card button{margin-top:10px}
+.exercise-card button:disabled{cursor:default}
+#exercise-begin,#exercise-next,#exercise-check,#exercise-replay{background:var(--green);color:#fff;border-color:var(--green)}
+.exercise-card #exercise-phrase{color:var(--ink);font-weight:800;font-size:18px}
+.exercise-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.exercise-choices button{text-align:left;margin:0}
+.exercise-choices button.correct{background:#deefdb;border-color:#709774}
+.exercise-choices button.incorrect{background:#fbe5db;border-color:#bb816d}
+#exercise-fill{margin-top:11px}
+#exercise-fill label{display:block;font-weight:800;font-size:14px}
+#exercise-input{border:1px solid #b7c7b7;border-radius:9px;background:#fcfbf6;padding:8px 10px;width:min(100%,340px);margin-top:5px}
+#exercise-feedback{margin-top:8px;white-space:pre-line}
+@media(max-width:460px){.exercise-choices{grid-template-columns:1fr}}

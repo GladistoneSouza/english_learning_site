@@ -121,6 +121,15 @@
     byId("meaning").textContent = meaning;
     byId("example").textContent = example;
     byId("translation").textContent = translation;
+    const tip = pronunciationTips.get(word) ?? [
+      "Ouça a palavra devagar e repita. Depois, ouça a frase e repita no mesmo ritmo.",
+      "Listen slowly and repeat the word. Then listen to the sentence and copy its rhythm."
+    ];
+    byId("tip-pt").textContent = tip[0];
+    byId("tip-en").textContent = tip[1];
+    byId("dictionary").href = "https://en.wiktionary.org/wiki/" + encodeURIComponent(word.replaceAll(" ", "_")) + "#English";
+    byId("hear-word").disabled = !englishSpeech.supported;
+    byId("hear-example").disabled = !englishSpeech.supported;
     byId("answer").hidden = !revealed;
     byId("ratings").hidden = !revealed;
     byId("reveal").hidden = revealed;
@@ -130,6 +139,9 @@
   }
 
   function setMode(nextMode) {
+    englishSpeech.stop();
+    byId("audio-status").textContent = "";
+    byId("answer").querySelector("details").open = false;
     mode = nextMode;
     queue = mode === "daily" ? dayWords : dueWords();
     index = 0;
@@ -140,6 +152,9 @@
   }
 
   function moveCard(amount) {
+    englishSpeech.stop();
+    byId("audio-status").textContent = "";
+    byId("answer").querySelector("details").open = false;
     index += amount;
     revealed = false;
     byId("feedback").textContent = "";
@@ -148,6 +163,9 @@
   }
 
   function rateCard(known) {
+    englishSpeech.stop();
+    byId("audio-status").textContent = "";
+    byId("answer").querySelector("details").open = false;
     const word = queue[index];
     const reviews = readState().reviews;
     const now = new Date();
@@ -175,6 +193,9 @@
     byId("list").open = false;
     makeList();
     setMode("daily");
+    document.dispatchEvent(new CustomEvent("study-vocabulary-change", {
+      detail: {day: key, entries: dayWords.map((word) => words.get(word))}
+    }));
   });
   byId("daily").addEventListener("click", () => setMode("daily"));
   byId("review").addEventListener("click", () => setMode("review"));
@@ -185,6 +206,8 @@
   });
   byId("prev").addEventListener("click", () => moveCard(-1));
   byId("next").addEventListener("click", () => moveCard(1));
+  byId("hear-word").addEventListener("click", () => englishSpeech.play(queue[index], byId("audio-status")));
+  byId("hear-example").addEventListener("click", () => englishSpeech.play(words.get(queue[index])[2], byId("audio-status")));
   byId("again").addEventListener("click", () => rateCard(false));
   byId("know").addEventListener("click", () => rateCard(true));
   window.addEventListener("storage", (event) => {

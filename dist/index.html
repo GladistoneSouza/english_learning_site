@@ -10,6 +10,7 @@
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 <script src="words.js" defer></script>
+<script src="exercises.js" defer></script>
 <script src="vocabulary.js" defer></script>
 <script src="app.js" defer></script>
 </head>
@@ -89,15 +90,27 @@
         <button type="button" id="vocab-review" aria-pressed="false">Revisar <span id="vocab-due"></span></button>
       </div>
     </div>
+    <p class="vocab-jump"><a href="#exercicios">Ir para o treino rápido ↓</a></p>
     <div class="vocab-grid">
       <article class="card vocab-card" aria-label="Flashcards de vocabulário">
         <div id="vocab-practice">
           <p id="vocab-position" aria-live="polite"></p>
           <h3 id="vocab-word" lang="en"></h3>
+          <div class="vocab-audio">
+            <button type="button" id="vocab-hear-word">▶ Ouvir palavra</button>
+            <label><input type="checkbox" id="speech-slow"> Mais devagar</label>
+          </div>
           <div id="vocab-answer" hidden>
             <p id="vocab-meaning"></p>
             <p id="vocab-example" lang="en"></p>
             <p id="vocab-translation"></p>
+            <button type="button" id="vocab-hear-example">▶ Ouvir frase</button>
+            <details class="pronunciation">
+              <summary>Dica de pronúncia</summary>
+              <p id="vocab-tip-pt"></p>
+              <p id="vocab-tip-en" lang="en"></p>
+              <a id="vocab-dictionary" target="_blank" rel="noopener noreferrer">Consultar no Wikcionário ↗</a>
+            </details>
           </div>
           <div class="vocab-actions">
             <button type="button" id="vocab-reveal" aria-controls="vocab-answer" aria-expanded="false">Mostrar resposta</button>
@@ -123,8 +136,45 @@
           <ul id="vocab-words"></ul>
         </details>
         <p id="vocab-feedback" role="status"></p>
+        <p id="vocab-audio-status" role="status"></p>
       </div>
     </div>
+  </section>
+  <section class="section" id="exercicios" aria-labelledby="exercise-title">
+    <div class="section-head vocab-head">
+      <div><p class="kicker">INGLÊS A1</p><h2 id="exercise-title">Treino rápido</h2></div>
+      <strong class="exercise-best" id="exercise-best"></strong>
+    </div>
+    <article class="card exercise-card">
+      <div id="exercise-start">
+        <p>Seis perguntas curtas de vocabulário, gramática e escuta. Cada acerto vale 10 pontos.</p>
+        <button type="button" id="exercise-begin">Começar treino</button>
+      </div>
+      <div id="exercise-round" hidden>
+        <p id="exercise-progress"></p>
+        <h3 id="exercise-prompt" tabindex="-1"></h3>
+        <p id="exercise-phrase" lang="en"></p>
+        <div id="exercise-listening" class="vocab-audio" hidden>
+          <button type="button" id="exercise-play">▶ Ouvir e escolher</button>
+          <button type="button" id="exercise-text">Ver palavra sem áudio</button>
+        </div>
+        <form id="exercise-form">
+          <div id="exercise-choices" class="exercise-choices" role="group" aria-label="Opções de resposta"></div>
+          <div id="exercise-fill" hidden>
+            <label for="exercise-input">Sua resposta em inglês</label>
+            <input id="exercise-input" type="text" lang="en" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="80">
+          </div>
+          <button type="submit" id="exercise-check" hidden>Conferir resposta</button>
+        </form>
+        <p id="exercise-feedback" role="status"></p>
+        <button type="button" id="exercise-next" hidden>Próxima pergunta</button>
+      </div>
+      <div id="exercise-finish" hidden>
+        <h3 id="exercise-result" tabindex="-1"></h3>
+        <p id="exercise-result-note"></p>
+        <button type="button" id="exercise-replay">Treinar de novo</button>
+      </div>
+    </article>
   </section>
   <section class="section notebook" id="caderno" aria-labelledby="notebook-title">
     <div class="section-head">
