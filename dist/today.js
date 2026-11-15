@@ -15,8 +15,10 @@
     return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
   }
 
+  // Hoje vem do app (dados ao vivo); dias anteriores vêm direto do localStorage,
+  // para não encher o cache do app.js com dias que ele não precisa.
   function record(date) {
-    if (typeof readDay === "function") return readDay(date);
+    if (key(date) === key(new Date()) && typeof readDay === "function") return readDay(date);
     try {
       const raw = localStorage.getItem(prefix + key(date));
       return raw ? JSON.parse(raw) : null;
@@ -27,7 +29,7 @@
 
   function didPractice(day) {
     if (!day) return false;
-    if (typeof practiced === "function") {
+    if (typeof practiced === "function" && day.timers && day.steps) {
       try { return practiced(day); } catch { /* registro antigo */ }
     }
     return day.minutes > 0 || Boolean(day.shadow) || Boolean(day.grammar);
@@ -50,6 +52,7 @@
     const shown = Math.min(minutes, goal);
     fill.setAttribute("stroke-dasharray", (shown / goal * 100) + " 100");
     dial.classList.toggle("done", minutes >= goal);
+    dial.classList.toggle("empty", minutes === 0);
     minutesEl.textContent = String(minutes);
     dial.setAttribute("aria-label", "Listening de hoje: " + minutes + " de " + goal + " minutos");
     const days = streak();
@@ -67,6 +70,6 @@
   ["input", "change", "click"].forEach((type) => document.addEventListener(type, schedule, true));
   document.addEventListener("visibilitychange", () => { if (!document.hidden) render(); });
   window.addEventListener("storage", schedule);
-  setInterval(render, 15000);
+  setInterval(render, 1000); // o cronômetro do app soma minutos sem disparar eventos
   render();
 })();

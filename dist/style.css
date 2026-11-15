@@ -57,6 +57,7 @@ button,a,input,textarea,summary{-webkit-tap-highlight-color:transparent}
 .dial-center{position:absolute;top:0;width:200px;height:200px;display:grid;place-content:center;text-align:center}
 .dial-center strong{font:800 64px/1 var(--display);letter-spacing:-.05em}
 .dial-center span{font:600 16px/1.2 var(--display);color:#dfe5fb}
+.dial.empty .dial-fill{visibility:hidden}
 .dial.done .dial-center strong{color:var(--marca)}
 .streak{font-size:15px;color:#dfe5fb;text-align:center}
 
@@ -137,7 +138,7 @@ progress::-moz-progress-bar{background:var(--caneta-2);border-radius:99px}
 input:not([type=checkbox]),textarea{width:100%;min-width:0;padding:10px 12px;border:1px solid #bfcae2;border-radius:var(--r-sm);background:var(--folha)}
 .media-fields .minutes{width:96px}
 .timer{border-top:1px dashed var(--pauta);margin-top:12px;padding-top:12px}
-.timer-main,.timer-controls{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.timer-main,.timer-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
 .timer-name{font-weight:700}
 .timer-duration{display:flex;gap:6px;align-items:center;color:var(--apagado);font-size:14px}
 .timer-duration input{width:64px;padding:5px 6px}
@@ -255,7 +256,8 @@ input:not([type=checkbox]),textarea{width:100%;min-width:0;padding:10px 12px;bor
   .day-dot{top:3px;right:4px;font-size:8px}
   .week-progress{grid-template-columns:1fr auto;gap:6px 10px;font-size:14px}
   .week-progress progress{grid-row:2;grid-column:1/-1}
-  .practice-grid,.vocab-grid,.notes-grid{grid-template-columns:1fr}
+  .practice-grid,.vocab-grid,.notes-grid{grid-template-columns:minmax(0,1fr)}
+  .clock{font-size:28px}
   .card{padding:18px}
   .vocab-card{padding:20px}
   .method{grid-template-columns:1fr}
