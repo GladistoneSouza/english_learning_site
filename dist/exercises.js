@@ -111,7 +111,25 @@ const pronunciationTips = new Map([
     ["Can you ___ that, please?", "Você pode repetir isso, por favor? (repeat)", ["repeat"], "Depois de can, repeat fica na forma básica."],
     ["___ is my coat?", "Onde está meu casaco?", ["where"], "Use where para perguntar onde algo está."],
     ["I have ___ appointment at nine.", "Tenho uma consulta às nove.", ["an"], "Appointment começa com som de vogal, então usamos an."],
-    ["We ___ busy yesterday.", "Estávamos ocupados ontem.", ["were"], "Com we, a forma de to be no passado é were."]
+    ["We ___ busy yesterday.", "Estávamos ocupados ontem.", ["were"], "Com we, a forma de to be no passado é were."],
+    ["He ___ the bus at six.", "Ele pega o ônibus às seis. (take)", ["takes"], "Com he, acrescentamos -s a take."],
+    ["She ___ like tea.", "Ela não gosta de chá. (do not)", ["does not", "doesn't"], "Use does not ou doesn't com she. Like fica na forma básica."],
+    ["They ___ work on Sundays.", "Eles não trabalham aos domingos. (do not)", ["do not", "don't"], "Use do not ou don't com they."],
+    ["___ do you get off the bus?", "Em que lugar você desce do ônibus?", ["where"], "Where pergunta pelo lugar."],
+    ["___ time does the store open?", "A que horas a loja abre?", ["what"], "Use What time para perguntar a hora."],
+    ["There ___ a book on the shelf.", "Há um livro na prateleira.", ["is"], "Use there is quando há uma coisa no singular."],
+    ["There ___ two cups on the tray.", "Há dois copos na bandeja.", ["are"], "Use there are antes de um substantivo no plural."],
+    ["My appointment is ___ Monday.", "Minha consulta é na segunda-feira.", ["on"], "Use on com dias da semana."],
+    ["The class starts ___ nine.", "A aula começa às nove.", ["at"], "Use at para indicar um horário."],
+    ["The kids are ___ outside.", "As crianças estão brincando lá fora. (play)", ["playing"], "Use are + verbo com -ing para uma ação que está acontecendo."],
+    ["Please ___ your hands.", "Por favor, lave as mãos. (wash)", ["wash"], "Em um pedido direto, use a forma básica do verbo."],
+    ["Could I ___ a medium coffee, please?", "Eu gostaria de um café médio, por favor. (have / get)", ["have", "get"], "Could I have ou Could I get são formas educadas de pedir."],
+    ["We ___ to the park yesterday.", "Fomos ao parque ontem. (go)", ["went"], "Went é o passado de go."],
+    ["I ___ at home yesterday.", "Eu estava em casa ontem. (to be)", ["was"], "No passado, use I was."],
+    ["This is ___ coat.", "Este é o meu casaco.", ["my"], "Use my antes da coisa que pertence a você quando fala de si mesma."],
+    ["___ are my keys here in my hand.", "Estas são as minhas chaves, aqui na minha mão. (this / these)", ["these"], "Use these para coisas no plural que estão perto."],
+    ["My bag is ___ the chair.", "Minha bolsa está embaixo da cadeira.", ["under"], "Under indica que algo está embaixo."],
+    ["I need ___ buy milk.", "Eu preciso comprar leite.", ["to"], "Use need to seguido do verbo na forma básica."]
   ];
   let day = "";
   let dailyEntries = [];
@@ -203,6 +221,8 @@ const pronunciationTips = new Map([
     englishSpeech.stop();
     const question = questions[position];
     graded = false;
+    get("progress-bar").max = questions.length;
+    get("progress-bar").value = position;
     get("progress").textContent = (activeMission ? activeMission.title + " · " : "") + "Pergunta " + (position + 1) + " de " + questions.length + " · " + score + " pontos";
     get("prompt").textContent = question.listening ? "O que você ouviu em inglês?"
       : question.choices ? "O que isso significa?" : "Complete a frase em inglês.";
@@ -256,6 +276,7 @@ const pronunciationTips = new Map([
     const correct = question.answers.some((answer) => normalize(answer) === normalize(response));
     graded = true;
     if (correct) score += points;
+    get("progress-bar").value = position + 1;
     get("input").disabled = true;
     get("check").hidden = true;
     for (const button of get("choices").children) {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f8f7f2">
+<meta name="theme-color" content="#f4f7f8">
 <meta name="description" content="Planeje sua semana de inglês A1, pratique listening e shadowing e registre seu progresso.">
 <title>Inglês em 10 · Planejador A1</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -18,14 +18,19 @@
 <a class="skip" href="#planejador">Ir ao planejador</a>
 <header class="top"><div class="shell top-inner">
   <a class="brand" href="#inicio"><span class="brand-icon" aria-hidden="true">▤</span> Inglês em 10</a>
-  <nav aria-label="Seções"><a href="#planejador">Planejador</a><a href="#vocabulario">Vocabulário</a><a href="#caderno">Meu caderno</a></nav>
+  <nav class="app-nav" aria-label="Seções">
+    <a href="#planejador"><span class="nav-icon" aria-hidden="true">▦</span>Semana</a>
+    <a href="#vocabulario"><span class="nav-icon" aria-hidden="true">Aa</span>Vocabulário</a>
+    <a href="#exercicios"><span class="nav-icon" aria-hidden="true">✓</span>Exercícios</a>
+    <a href="#caderno"><span class="nav-icon" aria-hidden="true">▤</span>Caderno</a>
+  </nav>
   <span class="level">NÍVEL A1</span>
 </div></header>
 <main class="shell" id="inicio">
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy"><p class="kicker"><span></span> MEU PLANO DE INGLÊS</p>
-      <h1 id="hero-title">Meu inglês,<br><em>no meu ritmo.</em></h1>
-      <p class="intro">10 minutos de listening por dia. Nos dias de aula, o treino é mais leve. Nos outros, tem espaço para shadowing e gramática.</p>
+    <div class="hero-copy">
+      <h1 id="hero-title">Seu treino<br><em>de inglês.</em></h1>
+      <p class="intro">Comece com 10 minutos de escuta ou escolha uma prática abaixo.</p>
       <a class="button dark" id="go-today" href="#treino">Treinar hoje</a>
     </div>
     <aside class="feature" aria-label="Série sugerida para listening">
@@ -38,6 +43,11 @@
       </div>
     </aside>
   </section>
+  <nav class="study-links" aria-label="Começar uma prática">
+    <a href="#vocabulario"><span class="study-icon" aria-hidden="true">Aa</span><span><strong>Flashcards</strong><small>Palavras do dia e revisão</small></span><b aria-hidden="true">›</b></a>
+    <a href="#exercicios"><span class="study-icon" aria-hidden="true">✓</span><span><strong>Treino rápido</strong><small>6 perguntas · até 60 pontos</small></span><b aria-hidden="true">›</b></a>
+    <a href="#caderno"><span class="study-icon" aria-hidden="true">▤</span><span><strong>Meu caderno</strong><small>Palavras e frases que anotei</small></span><b aria-hidden="true">›</b></a>
+  </nav>
   <section class="section" id="planejador" aria-labelledby="week-title">
     <div class="section-head">
       <div><p class="kicker">SEGUNDA A DOMINGO</p><h2 id="week-title">Minha semana</h2></div>
@@ -153,6 +163,7 @@
       </div>
       <div id="exercise-round" hidden>
         <p id="exercise-progress"></p>
+        <progress class="exercise-progress-bar" id="exercise-progress-bar" max="6" value="0" aria-label="Perguntas respondidas"></progress>
         <h3 id="exercise-prompt" tabindex="-1"></h3>
         <p id="exercise-phrase" lang="en"></p>
         <div id="exercise-listening" class="vocab-audio" hidden>
